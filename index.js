@@ -8,7 +8,20 @@ var AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
 var yourApiKey = 'K66X37W9RVFUC4RQ';
 var alphaVantageAPI = new AlphaVantageAPI(yourApiKey, 'compact', true);
 
-alphaVantageAPI.getDailyData('MSFT');
+const getStocks = async () => {
+  try {
+  	return axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&apikey=K66X37W9RVFUC4RQ&datatype=json&outputsize=compact").then(dailyData => {
+        	// console.log(dailyData.data['Time Series (Daily)'])
+        	for (variable in dailyData.data['Time Series (Daily)']){
+        		console.log (dailyData.data['Time Series (Daily)'][variable]['4. close']);
+        		break;
+        	}
+        	})
+  	} catch(error){
+  		console.error(error)
+  	}}
+
+getStocks()
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
