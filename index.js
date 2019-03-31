@@ -38,12 +38,19 @@ const getStocks = async (ticker) => {
 const getCryptos = async (crypto) => {
 	try {
 	return axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${crypto}&to_currency=USD&apikey=K66X37W9RVFUC4RQ`).then(dailyData => {
-			console.log(dailyData.data['Realtime Currency Exchange Rate']['5. Exchange Rate'])
+			// console.log(typeof(dailyData));
+
+			if (dailyData.data['Note']){
+				console.log("No Data")
+				return;
+			}
+
 			let value = formatter.format(dailyData.data['Realtime Currency Exchange Rate']['5. Exchange Rate'])
 			cryptos.push([crypto, value])
 			return cryptos;
-	})}
-	catch(error){
+	}).catch(error =>{
+		console.log(error.response)
+	})} catch(error){
   		console.error(error)
   	}}
 
