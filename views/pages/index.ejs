@@ -7,11 +7,20 @@
 <body>
 
 <h1> Stocks </h1>
- <b><%= stocks[0]%> </b>: <%= stocks[1]%>
- <br>
- <b><%= stocks[2]%> </b>: <%= stocks[3]%>
- <br>
- <b><%= stocks[4]%> </b>: <%= stocks[5]%>
+
+	<% stocks.forEach((stock) => { %>
+	<b> <%= stock[0]%>: </b>
+	<%= stock[1]%> <br>
+	 <% }) %>
+
+<h1> Crypto </h1>
+
+	<% cryptos.forEach((crypto) => { %>
+	<b> <%= crypto[0]%>: </b>
+	<%= crypto[1]%> <br>
+	 <% }) %>
+
+
 
 </body>
 </html>
