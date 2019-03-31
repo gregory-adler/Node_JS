@@ -3,14 +3,20 @@ const path = require('path')
 const axios = require('axios')
 const PORT = process.env.PORT || 5000
 
-var AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
+let AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
 
-var yourApiKey = 'K66X37W9RVFUC4RQ';
-var alphaVantageAPI = new AlphaVantageAPI(yourApiKey, 'compact', true);
+let yourApiKey = 'K66X37W9RVFUC4RQ';
+let alphaVantageAPI = new AlphaVantageAPI(yourApiKey, 'compact', true);
 
 let stocks = []
-
 let ticker = ['MSFT', 'NVDA', 'AAPL']
+
+// styles currency
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2
+})
 
 const getStocks = async (ticker) => {
   try {
@@ -19,7 +25,8 @@ const getStocks = async (ticker) => {
 		for (variable in dailyData.data['Time Series (Daily)']){
 			// console.log (dailyData.data['Time Series (Daily)'][variable]['4. close']);
 			stocks.push(dailyData['data']['Meta Data']['2. Symbol']);
- 			stocks.push(dailyData.data['Time Series (Daily)'][variable]['4. close']);
+			let value = formatter.format(dailyData.data['Time Series (Daily)'][variable]['4. close']);
+ 			stocks.push(value);
 			break;
 		}
 		return stocks;
