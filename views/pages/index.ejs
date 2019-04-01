@@ -2,6 +2,7 @@
 <html>
 <head>
   <% include ../partials/header.ejs %>
+  <link href="/css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -9,18 +10,22 @@
 <h1> Stocks </h1>
 
 	<% stocks.forEach((stock) => { %>
+<p>
 	<b> <%= stock[0]%>: </b>
 	<%= stock[1]%> <br>
+</p>
 	 <% }) %>
+
 
 <h1> Crypto </h1>
 
 	<% cryptos.forEach((crypto) => { %>
+<p>
 	<b> <%= crypto[0]%>: </b>
 	<%= crypto[1]%> <br>
+
+</p>
 	 <% }) %>
-
-
 
 </body>
 </html>

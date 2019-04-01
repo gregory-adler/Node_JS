@@ -15,7 +15,7 @@ let crypto_ticker = ['BTC', 'ETH',]
 
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
+  style: 'decimal',
   currency: 'USD',
   minimumFractionDigits: 2
 })
@@ -55,7 +55,6 @@ const getCryptos = async (crypto) => {
   	}}
 
 
-
 // stock calls 
 for (i=0; i< ticker.length; i++){
 		// console.log (ticker[i]);
@@ -66,7 +65,6 @@ for (i=0; i< ticker.length; i++){
 for (i=0; i< crypto_ticker.length; i++){
 		getCryptos(crypto_ticker[i]).then(cryptos=> console.log(cryptos))
 	}
-
 
 
 express()
