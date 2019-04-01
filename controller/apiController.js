@@ -86,6 +86,7 @@ for (i=0; i< crypto_ticker.length; i++){
 	}
 		getCryptos(crypto_ticker[i]).then(cryptos=> cryptos.sort())
 	}
+	let temp = await cryptos
 	}
 
 
