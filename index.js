@@ -20,22 +20,7 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2
 })
 
-const getStocks = async (ticker) => {
-  try {
-  	return axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=K66X37W9RVFUC4RQ&datatype=json&outputsize=compact`).then(dailyData => {
-		for (variable in dailyData.data['Time Series (Daily)']){
-			// console.log (dailyData.data['Time Series (Daily)'][variable]['4. close']);
-			let value = formatter.format(dailyData.data['Time Series (Daily)'][variable]['4. close']);
-			stocks.push([ticker, value]);
-			break;
-		}
-		return stocks;
-	})}
-	catch(error){
-  		console.error(error)
-  	}}
-
-const getCryptos = async (crypto) => {
+const getCrypto = async (crypto) => {
 	try {
 	return axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${crypto}&to_currency=USD&apikey=K66X37W9RVFUC4RQ`).then(dailyData => {
 			// console.log(typeof(dailyData));
@@ -54,9 +39,19 @@ const getCryptos = async (crypto) => {
   		console.error(error)
   	}}
 
-
-const batchCryptos = async (crypto_ticker) => {
+const batchStocks = async (ticker) => {
 	try {
+		return axios.get(`https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=msft,aapl,googl&apikey=K66X37W9RVFUC4RQ&datatype=json&outputsize=compact%27`).then(dailyData =>{
+			
+			// console.log (dailyData.data[`Stock Quotes`]);
+			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
+				let symbol = (dailyData.data['Stock Quotes'][i][`1. symbol`])
+				let value = formatter.format(dailyData.data['Stock Quotes'][i][`2. price`])
+				stocks.push([symbol, value])
+
+			}
+			return;
+		})
 
 	}
 	catch(errror){
@@ -64,7 +59,7 @@ const batchCryptos = async (crypto_ticker) => {
 	}
 }
 
-const batchStocks = async (ticker) => {
+const batchCryptos = async (crypto_ticker) => {
 	try {
 
 	}
@@ -77,7 +72,7 @@ const batchStocks = async (ticker) => {
 const callStocks = async () => {
 for (i=0; i< ticker.length; i++){
 		// console.log (ticker[i]);
-		getStocks(ticker[i]).then(stocks=> console.log(stocks))
+		getStock(ticker[i]).then(stocks=> console.log(stocks))
 	}
 
 }
@@ -85,12 +80,12 @@ for (i=0; i< ticker.length; i++){
 const callCryptos = async () => {
 // crypto calls
 for (i=0; i< crypto_ticker.length; i++){
-		getCryptos(crypto_ticker[i]).then(cryptos=> console.log(cryptos))
+		getCrypto(crypto_ticker[i]).then(cryptos=> console.log(cryptos))
 	}
 
 }
 
-callStocks()
+batchStocks()
 callCryptos()
 
 express()
