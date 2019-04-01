@@ -1,10 +1,11 @@
 const axios = require('axios')
 
 let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD']
-let stocks = []
-
 let crypto_ticker = ['BTC', 'ETH']
-let cryptos = ['7', '4']
+
+
+let stocks = []
+let cryptos = []
 
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
@@ -13,7 +14,7 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2
 })
 
-exports.getStocks = function (req, res){
+const getStocks = function (req, res){
 	console.log ("stock controller")
 	stocks = []
 
@@ -43,10 +44,9 @@ exports.getStocks = function (req, res){
 			}
 			stocks.sort()
 			console.log(stocks)
-
-			res.render('pages/index', {stocks: stocks, cryptos: cryptos})
-			// res.send(stocks);
-		})
+			return stocks
+		}
+		)
 
 	}
 	catch(error){
@@ -55,11 +55,11 @@ exports.getStocks = function (req, res){
 
 }
 
-
-exports.getCryptos = function (req, res){
+const getCryptos = function (req, res, crypto){
+	console.log ("crypto controller")
 	try {
+		 let crypto = arguments[0]
 	return axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${crypto}&to_currency=USD&apikey=K66X37W9RVFUC4RQ`).then(dailyData => {
-			// console.log(typeof(dailyData));
 
 			if (dailyData.data['Note']){
 				console.log("No Data - API requests")
@@ -68,6 +68,7 @@ exports.getCryptos = function (req, res){
 
 			let value = formatter.format(dailyData.data['Realtime Currency Exchange Rate']['5. Exchange Rate'])
 			cryptos.push([crypto, value])
+			console.log(cryptos)
 			return cryptos;
 	}).catch(error =>{
 		console.log(error.response)
@@ -80,7 +81,16 @@ exports.getCryptos = function (req, res){
 const callCryptos = async () => {
 // crypto calls
 for (i=0; i< crypto_ticker.length; i++){
-		getCrypto(crypto_ticker[i]).then(cryptos=> console.log(cryptos))
+	if (i==0){
+		cryptos = []
 	}
+		getCryptos(crypto_ticker[i]).then(cryptos=> cryptos.sort())
+	}
+	}
+
+
+exports.getData = function (req, res){
+	callCryptos()
+	getStocks().then(stocks => res.render('pages/index', {stocks: stocks, cryptos: cryptos}))
 
 }
