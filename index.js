@@ -15,7 +15,7 @@ let crypto_ticker = ['BTC', 'ETH',]
 
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
-  style: 'decimal',
+  style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 2
 })
