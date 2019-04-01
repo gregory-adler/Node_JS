@@ -41,7 +41,7 @@ const getCryptos = async (crypto) => {
 			// console.log(typeof(dailyData));
 
 			if (dailyData.data['Note']){
-				console.log("No Data")
+				console.log("No Data - API requests")
 				return;
 			}
 
@@ -55,17 +55,43 @@ const getCryptos = async (crypto) => {
   	}}
 
 
+const batchCryptos = async (crypto_ticker) => {
+	try {
+
+	}
+	catch(errror){
+		console.error(error)
+	}
+}
+
+const batchStocks = async (ticker) => {
+	try {
+
+	}
+	catch(errror){
+		console.error(error)
+	}
+}
+
 // stock calls 
+const callStocks = async () => {
 for (i=0; i< ticker.length; i++){
 		// console.log (ticker[i]);
 		getStocks(ticker[i]).then(stocks=> console.log(stocks))
 	}
 
+}
+
+const callCryptos = async () => {
 // crypto calls
 for (i=0; i< crypto_ticker.length; i++){
 		getCryptos(crypto_ticker[i]).then(cryptos=> console.log(cryptos))
 	}
 
+}
+
+callStocks()
+callCryptos()
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
