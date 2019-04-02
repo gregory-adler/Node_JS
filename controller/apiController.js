@@ -1,12 +1,6 @@
 const axios = require('axios')
 const rp = require('request-promise');
 
-let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD']
-
-
-// remove global variables
-let stocks = []
-
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -14,9 +8,8 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2
 })
 
-const getStocks = function (req, res){
+const getStocks= function (stocks, ticker){
 	console.log ("stock controller")
-	stocks = []
 
 	try {
 		let conc_string = ''
@@ -30,7 +23,7 @@ const getStocks = function (req, res){
 
 		return axios.get(`https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${conc_string}&apikey=K66X37W9RVFUC4RQ&datatype=json&outputsize=compact%27`).then(dailyData =>{
 
-
+			// api overload
 			if (dailyData.data['Note']){
 				console.log("No Data - API requests")
 				return;
@@ -48,7 +41,6 @@ const getStocks = function (req, res){
 			return stocks
 		}
 		)
-
 	}
 	catch(error){
 		console.error(error)
@@ -58,6 +50,7 @@ const getStocks = function (req, res){
 
 const getCryptos = function(cryptos){
 	console.log ("crypto controller")
+
 	try {
 		axios.get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=10&convert=USD`, 
 			{'headers': { 
@@ -65,9 +58,7 @@ const getCryptos = function(cryptos){
   			} }).then(response =>{
   				// console.log(response.data.data)
 				for (i =0; i<response.data.data.length; i++){
-					// console.log (response.data[i])
-					// console.log(response.data[i]['symbol'])
-					// console.log(response.data[i]['quote']['USD']['price'])
+					// console.log(response.data.data)
 					let symbol = (response.data.data[i]['symbol'])
 					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
 					cryptos.push([symbol, value])
@@ -84,25 +75,49 @@ const getCryptos = function(cryptos){
 
 }
 
-const saveData = async() =>{
+const saveCryptos = async(cryptos) =>{
 	const fs = require('fs');
+	await cryptos;
 	var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-	const jsonContent = JSON.stringify(alphabet);
+	const jsonContent = JSON.stringify(cryptos);
 
-	fs.writeFile("./alphabet.json", jsonContent, 'utf8', function (err) {
+	fs.writeFile("./cryptos.json", jsonContent, 'utf8', function (err) {
 		if (err) {
 			return console.log(err);
 		}
 
-    console.log("The file was saved!");
-}); 
+    	console.log("The file was saved!");
+	}); 
+}
+
+const saveStocks = async(stocks) =>{
+	const fs = require('fs');
+	await stocks;
+	var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+	const jsonContent = JSON.stringify(stocks);
+
+	fs.writeFile("./stocks.json", jsonContent, 'utf8', function (err) {
+		if (err) {
+			return console.log(err);
+		}
+
+    	console.log("The file was saved!");
+	}); 
 }
 
 
+
 exports.getData = function (req, res){
+	let stocks = []
 	let cryptos = []
+	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD']
+
 	getCryptos(cryptos)
-	getStocks().then(stocks => res.render('pages/index', {stocks: stocks, cryptos: cryptos}))
-	saveData()
+	getStocks(stocks, ticker).then(stocks => { 
+		res.render('pages/index', {stocks: stocks, cryptos: cryptos})
+		saveStocks(stocks)
+		saveCryptos(cryptos)
+
+	})
 
 }
