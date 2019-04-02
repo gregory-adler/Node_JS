@@ -1,11 +1,11 @@
 const axios = require('axios')
+const rp = require('request-promise');
 
 let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD']
-let crypto_ticker = ['BTC', 'ETH']
 
 
+// remove global variables
 let stocks = []
-let cryptos = []
 
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
@@ -22,6 +22,7 @@ const getStocks = function (req, res){
 		let conc_string = ''
 		for (i=0; i< ticker.length; i++){
 			if (i==ticker.length){
+				conc_string= conc_string + ticker[i]
 				continue
 			}
 			conc_string= conc_string + ticker[i] + ','
@@ -55,43 +56,53 @@ const getStocks = function (req, res){
 
 }
 
-const getCryptos = function (req, res, crypto){
+const getCryptos = function(cryptos){
 	console.log ("crypto controller")
 	try {
-		 let crypto = arguments[0]
-	return axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${crypto}&to_currency=USD&apikey=K66X37W9RVFUC4RQ`).then(dailyData => {
+		axios.get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=10&convert=USD`, 
+			{'headers': { 
+  				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
+  			} }).then(response =>{
+  				// console.log(response.data.data)
+				for (i =0; i<response.data.data.length; i++){
+					// console.log (response.data[i])
+					// console.log(response.data[i]['symbol'])
+					// console.log(response.data[i]['quote']['USD']['price'])
+					let symbol = (response.data.data[i]['symbol'])
+					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
+					cryptos.push([symbol, value])
+				}
+				cryptos.sort()
+				console.log(cryptos)
+				return cryptos
+		}
+		)
 
-			if (dailyData.data['Note']){
-				console.log("No Data - API requests")
-				return;
-			}
-
-			let value = formatter.format(dailyData.data['Realtime Currency Exchange Rate']['5. Exchange Rate'])
-			cryptos.push([crypto, value])
-			console.log(cryptos)
-			return cryptos;
-	}).catch(error =>{
-		console.log(error.response)
-	})} catch(error){
-  		console.error(error)
-  	}}
-
-
-
-const callCryptos = async () => {
-// crypto calls
-for (i=0; i< crypto_ticker.length; i++){
-	if (i==0){
-		cryptos = []
+	} catch(error){
+		console.error(error)
 	}
-		getCryptos(crypto_ticker[i]).then(cryptos=> cryptos.sort())
-	}
-	let temp = await cryptos
-	}
+
+}
+
+const saveData = async() =>{
+	const fs = require('fs');
+	var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+	const jsonContent = JSON.stringify(alphabet);
+
+	fs.writeFile("./alphabet.json", jsonContent, 'utf8', function (err) {
+		if (err) {
+			return console.log(err);
+		}
+
+    console.log("The file was saved!");
+}); 
+}
 
 
 exports.getData = function (req, res){
-	callCryptos()
+	let cryptos = []
+	getCryptos(cryptos)
 	getStocks().then(stocks => res.render('pages/index', {stocks: stocks, cryptos: cryptos}))
+	saveData()
 
 }
