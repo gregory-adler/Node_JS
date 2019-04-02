@@ -29,7 +29,6 @@ const getStocks= function (stocks, ticker){
 				return;
 			}
 			
-			// console.log (dailyData.data[`Stock Quotes`]);
 			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
 				let symbol = (dailyData.data['Stock Quotes'][i][`1. symbol`])
 				let value = formatter.format(dailyData.data['Stock Quotes'][i][`2. price`])
@@ -60,10 +59,17 @@ const getCryptos = function(cryptos){
 				for (i =0; i<response.data.data.length; i++){
 					// console.log(response.data.data)
 					let symbol = (response.data.data[i]['symbol'])
+
+					// skip usd tether
+					if (symbol == 'USDT'){
+						continue;
+					}
+					let rank = response.data.data[i]['cmc_rank']
 					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
-					cryptos.push([symbol, value])
+					let day = response.data.data[i]['quote']['USD']['percent_change_24h'].toFixed(2) + '%'
+					let week = response.data.data[i]['quote']['USD']['percent_change_7d'].toFixed(2) + '%'
+					cryptos.push([rank, symbol, value, day, week])
 				}
-				cryptos.sort()
 				console.log(cryptos)
 				return cryptos
 		}
@@ -78,7 +84,6 @@ const getCryptos = function(cryptos){
 const saveCryptos = async(cryptos) =>{
 	const fs = require('fs');
 	await cryptos;
-	var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 	const jsonContent = JSON.stringify(cryptos);
 
 	fs.writeFile("./cryptos.json", jsonContent, 'utf8', function (err) {
@@ -93,7 +98,6 @@ const saveCryptos = async(cryptos) =>{
 const saveStocks = async(stocks) =>{
 	const fs = require('fs');
 	await stocks;
-	var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 	const jsonContent = JSON.stringify(stocks);
 
 	fs.writeFile("./stocks.json", jsonContent, 'utf8', function (err) {
@@ -110,7 +114,7 @@ const saveStocks = async(stocks) =>{
 exports.getData = function (req, res){
 	let stocks = []
 	let cryptos = []
-	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD']
+	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'QCOM']
 
 	getCryptos(cryptos)
 	getStocks(stocks, ticker).then(stocks => { 
