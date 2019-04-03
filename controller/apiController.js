@@ -52,7 +52,7 @@ const getCryptos = function(cryptos){
 	console.log ("crypto controller")
 
 	try {
-		axios.get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=10&convert=USD`, 
+		return axios.get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=10&convert=USD`, 
 			{'headers': { 
   				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
   			} }).then(response =>{
@@ -138,7 +138,6 @@ exports.getData = function (req, res){
 		res.render('pages/index', {stocks: stocks, cryptos: cryptos})
 		saveStocks(stocks)
 		saveCryptos(cryptos)
-
 	})
 
 }
