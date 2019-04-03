@@ -133,12 +133,11 @@ exports.getData = function (req, res){
 	let cryptos = []
 	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'QCOM']
 
+	getCryptos(cryptos)
 	getStocks(stocks, ticker).then(stocks => { 
-		getCryptos(cryptos).then(cryptos => {
 		res.render('pages/index', {stocks: stocks, cryptos: cryptos})
-			saveStocks(stocks)
-			saveCryptos(cryptos)
-		})
+		saveStocks(stocks)
+		saveCryptos(cryptos)
 	})
 
 }
