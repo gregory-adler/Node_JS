@@ -73,11 +73,15 @@ const getCryptos = function(cryptos){
 				}
 				if (cryptos.length == 0){
 					cryptos = loadCryptos()
+					return cryptos
 				}
 				console.log(cryptos)
 				return cryptos
-		}
-		)
+		}).catch(error =>{
+				console.log("crypto api error")
+  				cryptos = loadCryptos()
+  				return cryptos
+  			})
 
 	} catch(error){
 		console.error(error)
@@ -123,6 +127,7 @@ const loadCryptos = async () => {
 	let cryptoData = fs.readFileSync('./cryptos.json');  
 	let cryptos = JSON.parse(cryptoData);
 	console.log ("cryptos loaded")
+	console.log(cryptos)
 	return cryptos
 
 }
@@ -133,11 +138,13 @@ exports.getData = function (req, res){
 	let cryptos = []
 	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'QCOM']
 
-	getCryptos(cryptos)
+	getCryptos(cryptos).then(cryptos => {
+		saveCryptos(cryptos)
+	})
+
 	getStocks(stocks, ticker).then(stocks => { 
 		res.render('pages/index', {stocks: stocks, cryptos: cryptos})
 		saveStocks(stocks)
-		saveCryptos(cryptos)
 	})
 
 }
