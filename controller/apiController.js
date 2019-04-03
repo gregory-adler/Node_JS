@@ -121,7 +121,7 @@ const loadStocks = async () => {
 
 
 const loadCryptos = async () => {
-	let cryptoData = fs.readFileSync('./stocks.json');  
+	let cryptoData = fs.readFileSync('./cryptos.json');  
 	let cryptos = JSON.parse(cryptoData);
 	console.log ("cryptos loaded")
 	return cryptos
