@@ -57,10 +57,6 @@ const getCryptos = function(cryptos){
   				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
   			} }).then(response =>{
   				// console.log(response.data.data)
-  				if (response.data.data == undefined){
-  					cryptos = loadcrypto()
-  					return cryptos
-  				}
 				for (i =0; i<response.data.data.length; i++){
 					// console.log(response.data.data)
 					let symbol = (response.data.data[i]['symbol'])
@@ -74,6 +70,9 @@ const getCryptos = function(cryptos){
 					let day = response.data.data[i]['quote']['USD']['percent_change_24h'].toFixed(2) + '%'
 					let week = response.data.data[i]['quote']['USD']['percent_change_7d'].toFixed(2) + '%'
 					cryptos.push([rank, symbol, value, day, week])
+				}
+				if (cryptos.length == 0){
+					cryptos = loadCryptos()
 				}
 				console.log(cryptos)
 				return cryptos
