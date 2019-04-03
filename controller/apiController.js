@@ -1,5 +1,5 @@
 const axios = require('axios')
-const rp = require('request-promise');
+const fs = require('fs');
 
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
@@ -26,7 +26,8 @@ const getStocks= function (stocks, ticker){
 			// api overload
 			if (dailyData.data['Note']){
 				console.log("No Data - API requests")
-				return;
+				stocks= loadStocks()
+				return stocks;
 			}
 			
 			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
@@ -56,6 +57,10 @@ const getCryptos = function(cryptos){
   				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
   			} }).then(response =>{
   				// console.log(response.data.data)
+  				if (response.data.data == undefined){
+  					cryptos = loadcrypto()
+  					return cryptos
+  				}
 				for (i =0; i<response.data.data.length; i++){
 					// console.log(response.data.data)
 					let symbol = (response.data.data[i]['symbol'])
@@ -82,7 +87,6 @@ const getCryptos = function(cryptos){
 }
 
 const saveCryptos = async(cryptos) =>{
-	const fs = require('fs');
 	await cryptos;
 	const jsonContent = JSON.stringify(cryptos);
 
@@ -96,7 +100,6 @@ const saveCryptos = async(cryptos) =>{
 }
 
 const saveStocks = async(stocks) =>{
-	const fs = require('fs');
 	await stocks;
 	const jsonContent = JSON.stringify(stocks);
 
@@ -109,6 +112,21 @@ const saveStocks = async(stocks) =>{
 	}); 
 }
 
+const loadStocks = async () => {
+	let stockData = fs.readFileSync('./stocks.json');  
+	let stocks = JSON.parse(stockData);
+	console.log ("stocks loaded")
+	return stocks
+}
+
+
+const loadCryptos = async () => {
+	let cryptoData = fs.readFileSync('./stocks.json');  
+	let cryptos = JSON.parse(cryptoData);
+	console.log ("cryptos loaded")
+	return cryptos
+
+}
 
 
 exports.getData = function (req, res){

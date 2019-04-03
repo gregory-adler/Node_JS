@@ -3,9 +3,13 @@ body {
 }
 h1 {
 	text-indent: .25em;
-	color: navy blue;
+	margin-bottom: .25em;
+	margin-top: .25em;
+	font-size: 3em;
+	line-height: 1.2em;
+
 }
 
 p {
-	text-indent: 2em;
+	text-indent: 1.75em;
 }
