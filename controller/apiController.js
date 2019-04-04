@@ -8,6 +8,7 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2
 })
 
+
 const getStocks= function (stocks, ticker){
 	console.log ("stock controller")
 
@@ -29,11 +30,15 @@ const getStocks= function (stocks, ticker){
 				stocks= loadStocks()
 				return stocks;
 			}
+
+			const today = new Date()
+
+			let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 			
 			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
 				let symbol = (dailyData.data['Stock Quotes'][i][`1. symbol`])
 				let value = formatter.format(dailyData.data['Stock Quotes'][i][`2. price`])
-				stocks.push([symbol, value])
+				stocks.push([symbol, value, time])
 
 			}
 			stocks.sort()
@@ -57,6 +62,9 @@ const getCryptos = function(cryptos){
   				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
   			} }).then(response =>{
   				// console.log(response.data.data)
+  				const today = new Date()
+  				let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
 				for (i =0; i<response.data.data.length; i++){
 					// console.log(response.data.data)
 					let symbol = (response.data.data[i]['symbol'])
@@ -69,7 +77,7 @@ const getCryptos = function(cryptos){
 					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
 					let day = response.data.data[i]['quote']['USD']['percent_change_24h'].toFixed(2) + '%'
 					let week = response.data.data[i]['quote']['USD']['percent_change_7d'].toFixed(2) + '%'
-					cryptos.push([rank, symbol, value, day, week])
+					cryptos.push([rank, symbol, value, day, week, time])
 				}
 				if (cryptos.length == 0){
 					cryptos = loadCryptos()

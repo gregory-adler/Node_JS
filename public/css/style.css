@@ -13,3 +13,7 @@ h1 {
 p {
 	text-indent: 1.75em;
 }
+
+.small {
+	font-size: .75em;
+}

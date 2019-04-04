@@ -10,19 +10,21 @@
 <h1> Stocks </h1>
 
 	<% stocks.forEach((stock) => { %>
-<p>
-	<b> <%= stock[0]%>:&nbsp; </b>
-	<%= stock[1]%> <br>
-</p>
-	 <% }) %>
+	<p> <b> <%= stock[0]%>:&nbsp; </b><%= stock[1]%> <br> </p>
+	<% }) %>
+
+<p class = "small"> <i>last updated: <%= stocks[0][2]%> PST</i>
 
 
 
 <h1> Crypto </h1>
 
 	<% cryptos.forEach((crypto) => { %>
-<p>
-	<b> <%= crypto[1]%>: </b> &nbsp;<%= crypto[2]%> <% }) %>
+	<p> <b> <%= crypto[1]%>: </b> &nbsp;<%= crypto[2]%> </p><% }) 
+	%>
+
+<p class = "small"> <i>last updated: <%= cryptos[0][5]%> PST</i>
+
 
 </body>
 </html>
