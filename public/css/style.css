@@ -4,7 +4,6 @@ body {
 h1 {
 	text-indent: .25em;
 	margin-bottom: .25em;
-	margin-top: .25em;
 	font-size: 3em;
 	line-height: 1.2em;
 
@@ -15,5 +14,7 @@ p {
 }
 
 .small {
+	margin-top: -.5em;
+	line-height: .5em;
 	font-size: .75em;
 }

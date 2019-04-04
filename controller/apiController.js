@@ -9,6 +9,12 @@ const formatter = new Intl.NumberFormat('en-US', {
 })
 
 
+// styles time
+let options = {  
+	hour: "2-digit", minute: "2-digit" , second: "2-digit", hour12: false
+};  
+
+
 const getStocks= function (stocks, ticker){
 	console.log ("stock controller")
 
@@ -33,7 +39,7 @@ const getStocks= function (stocks, ticker){
 
 			const today = new Date()
 
-			let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			let time = today.toLocaleTimeString("en-us", options); 
 			
 			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
 				let symbol = (dailyData.data['Stock Quotes'][i][`1. symbol`])
@@ -63,7 +69,9 @@ const getCryptos = function(cryptos){
   			} }).then(response =>{
   				// console.log(response.data.data)
   				const today = new Date()
-  				let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+				let time = today.toLocaleTimeString("en-us", options); 
+
 
 				for (i =0; i<response.data.data.length; i++){
 					// console.log(response.data.data)
