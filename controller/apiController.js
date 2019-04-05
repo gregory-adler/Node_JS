@@ -11,7 +11,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 // styles time
 let options = {  
-	hour: "2-digit", minute: "2-digit" , second: "2-digit", hour12: false
+	hour: "2-digit", minute: "2-digit" , second: "2-digit", hour12: true
 };  
 
 
