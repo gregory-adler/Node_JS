@@ -105,6 +105,30 @@ const getCryptos = function(cryptos){
 
 }
 
+const getAggregate = function(){
+	console.log("aggregate controller")
+
+	try{
+		return axios.get(`https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest`, 
+			{'headers': { 
+  				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
+  			} }).then(response =>{
+  				// console.log(response.data.data)
+
+  				return response.data.data
+
+	}).catch(error =>{
+				console.log("getAggregate api error")
+				return 1
+  			})
+
+	} catch(error){
+		console.error(error)
+	}
+
+	return 
+}
+
 const saveCryptos = async(cryptos) =>{
 	await cryptos;
 	const jsonContent = JSON.stringify(cryptos);
@@ -151,14 +175,19 @@ const loadCryptos = async () => {
 const functionCaller = async () =>{
 	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'QCOM']
 	let cryptos = []
+	let aggregate = []
 	let stocks = []
-	let data = [2]
+	let data = [3]
 	cryptos = getCryptos(cryptos)
+	aggregate = getAggregate()
 	stocks = getStocks(stocks, ticker)
+
 	stocks.then(stocks => data[0]= stocks)
 	cryptos.then(cryptos => data[1] = cryptos)
+	aggregate.then(aggregate => data[2] = aggregate)
 	await cryptos
 	await stocks
+	await aggregate
 	return data
 
 }
@@ -169,8 +198,9 @@ exports.getData = function (req, res){
 	functionCaller().then(data => { 
 		let stocks = data[0]
 		let cryptos = data[1]
+		let aggregate = data[2]
 		console.log (data)
-		res.render('pages/index', {stocks: stocks, cryptos: cryptos})
+		res.render('pages/index', {stocks: stocks, cryptos: cryptos, aggregate: aggregate})
 		saveStocks(stocks)
 		saveCryptos(cryptos)
 	})
