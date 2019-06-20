@@ -2,20 +2,30 @@ body {
   background-color: white;
 }
 h1 {
-	text-indent: .25em;
+	margin-left: .3em;
 	margin-bottom: .25em;
-	font-size: 3em;
+	font-size: 2.5em;
 	line-height: 1.2em;
 
 }
 
 p {
-	text-indent: 1.75em;
+	margin-left: 1em;
 }
 
 .small {
 	margin-top: -1em;
-	text-indent: 2.5em;
 	line-height: .5em;
 	font-size: .75em;
+}
+.aggregate {
+
+	margin-top: 1em;
+	margin-left: 21em;
+	margin-bottom: 2em;
+	
+}
+
+.data {
+	margin-left: 45em;
 }

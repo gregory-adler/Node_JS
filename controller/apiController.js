@@ -105,7 +105,7 @@ const getCryptos = function(cryptos){
 
 }
 
-const getAggregate = function(){
+const getAggregate = function(aggregates){
 	console.log("aggregate controller")
 
 	try{
@@ -115,7 +115,17 @@ const getAggregate = function(){
   			} }).then(response =>{
   				// console.log(response.data.data)
 
-  				return response.data.data
+  				for (let property in response.data.data){
+  					if (response.data.data.hasOwnProperty(property)){
+  						// console.log (response.data.data[property])
+  						if (property == 'quote' || property == 'last_updated'){
+  							continue
+  						}
+  						aggregates.push([property, response.data.data[property]])
+  					}
+  				}
+
+  				return aggregates
 
 	}).catch(error =>{
 				console.log("getAggregate api error")
@@ -175,19 +185,19 @@ const loadCryptos = async () => {
 const functionCaller = async () =>{
 	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'QCOM']
 	let cryptos = []
-	let aggregate = []
+	let aggregates = []
 	let stocks = []
 	let data = [3]
 	cryptos = getCryptos(cryptos)
-	aggregate = getAggregate()
+	aggregates = getAggregate(aggregates)
 	stocks = getStocks(stocks, ticker)
 
 	stocks.then(stocks => data[0]= stocks)
 	cryptos.then(cryptos => data[1] = cryptos)
-	aggregate.then(aggregate => data[2] = aggregate)
+	aggregates.then(aggregates => data[2] = aggregates)
 	await cryptos
 	await stocks
-	await aggregate
+	await aggregates
 	return data
 
 }
@@ -199,8 +209,7 @@ exports.getData = function (req, res){
 		let stocks = data[0]
 		let cryptos = data[1]
 		let aggregate = data[2]
-		console.log (data)
-		res.render('pages/index', {stocks: stocks, cryptos: cryptos, aggregate: aggregate})
+		res.render('pages/index', {stocks: stocks, cryptos: cryptos, aggregates: aggregate})
 		saveStocks(stocks)
 		saveCryptos(cryptos)
 	})
