@@ -85,7 +85,8 @@ const getCryptos = function(cryptos){
 					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
 					let day = response.data.data[i]['quote']['USD']['percent_change_24h'].toFixed(2) + '%'
 					let week = response.data.data[i]['quote']['USD']['percent_change_7d'].toFixed(2) + '%'
-					cryptos.push([rank, symbol, value, day, week, time])
+					let url = `/cryptocurrency-icons/svg/color/${symbol}.svg`
+					cryptos.push([rank, symbol, value, url, day, week, time])
 				}
 				if (cryptos.length == 0){
 					cryptos = loadCryptos()

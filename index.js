@@ -6,7 +6,7 @@ const api_controller = require('./controller/apiController.js');
 
 
 express()
-  .use(express.static(path.join(__dirname, 'public')))
+  .use(express.static(path.join(__dirname, '/public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', api_controller.getData)
