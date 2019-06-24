@@ -44,11 +44,12 @@ const getStocks= function (stocks, ticker){
 			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
 				let symbol = (dailyData.data['Stock Quotes'][i][`1. symbol`])
 				let value = formatter.format(dailyData.data['Stock Quotes'][i][`2. price`])
-				stocks.push([symbol, value, time])
+				let url = `/stockicons/${symbol.toLowerCase()}.svg`
+				stocks.push([symbol, value, time, url])
 
 			}
 			stocks.sort()
-			// console.log(stocks)
+			 console.log(stocks)
 			return stocks
 		}
 		)
