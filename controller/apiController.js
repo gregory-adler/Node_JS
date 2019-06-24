@@ -60,7 +60,6 @@ const getStocks= function (stocks, ticker){
 }
 
 const getCryptos = function(cryptos){
-	console.log ("crypto controller")
 
 	try {
 		return axios.get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=10&convert=USD`, 
@@ -85,8 +84,10 @@ const getCryptos = function(cryptos){
 					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
 					let day = response.data.data[i]['quote']['USD']['percent_change_24h'].toFixed(2) + '%'
 					let week = response.data.data[i]['quote']['USD']['percent_change_7d'].toFixed(2) + '%'
-					let url = `/cryptocurrency-icons/svg/color/${symbol}.svg`
+					let url = `/cryptocurrency-icons/svg/color/${symbol.toLowerCase()}.svg`
 					cryptos.push([rank, symbol, value, url, day, week, time])
+
+					console.log(cryptos)
 				}
 				if (cryptos.length == 0){
 					cryptos = loadCryptos()
@@ -107,7 +108,6 @@ const getCryptos = function(cryptos){
 }
 
 const getAggregate = function(aggregates){
-	console.log("aggregate controller")
 
 	try{
 		return axios.get(`https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest`, 
