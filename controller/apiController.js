@@ -16,7 +16,7 @@ let options = {
 
 
 const getStocks= function (stocks, ticker){
-	console.log ("stock controller")
+	// console.log ("stock controller")
 
 	try {
 		let conc_string = ''
@@ -38,19 +38,21 @@ const getStocks= function (stocks, ticker){
 			}
 
 			const today = new Date()
+			let stock_index = 0
 
 			let time = today.toLocaleTimeString("en-us", options); 
 			
 			for (i =0; i< dailyData.data['Stock Quotes'].length; i++){
 				let symbol = (dailyData.data['Stock Quotes'][i][`1. symbol`])
 				let value = formatter.format(dailyData.data['Stock Quotes'][i][`2. price`])
+				stock_index += Number(dailyData.data['Stock Quotes'][i][`2. price`])
 				let url = `/stockicons/${symbol.toLowerCase()}.svg`
 				stocks.push([symbol, value, time, url])
 
 			}
 			stocks.sort()
-			 console.log(stocks)
-			return stocks
+			// console.log(stock_index)
+			return [stocks, stock_index]
 		}
 		)
 	}
@@ -88,7 +90,7 @@ const getCryptos = function(cryptos){
 					let url = `/cryptocurrency-icons/svg/color/${symbol.toLowerCase()}.svg`
 					cryptos.push([rank, symbol, value, url, day, week, time])
 
-					console.log(cryptos)
+					// console.log(cryptos)
 				}
 				if (cryptos.length == 0){
 					cryptos = loadCryptos()
@@ -120,10 +122,9 @@ const getAggregate = function(aggregates){
   				for (let property in response.data.data){
   					if (response.data.data.hasOwnProperty(property)){
   						// console.log (response.data.data[property])
-  						if (property == 'quote' || property == 'last_updated'){
-  							continue
+  						if (property == 'eth_dominance' || property == 'btc_dominance'){
+  							aggregates.push([property, response.data.data[property]])
   						}
-  						aggregates.push([property, response.data.data[property]])
   					}
   				}
 
@@ -185,21 +186,31 @@ const loadCryptos = async () => {
 }
 
 const functionCaller = async () =>{
-	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'QCOM']
+	let ticker = ['MSFT', 'NVDA', 'AAPL', 'GOOGL', 'AMD', 'SPOT', 'TSLA', 'NFLX', 'FB']
 	let cryptos = []
 	let aggregates = []
 	let stocks = []
-	let data = [3]
+	let data = [2]
+	stock_index = 0
 	cryptos = getCryptos(cryptos)
 	aggregates = getAggregate(aggregates)
-	stocks = getStocks(stocks, ticker)
+	stock_function= getStocks(stocks, ticker)
 
-	stocks.then(stocks => data[0]= stocks)
-	cryptos.then(cryptos => data[1] = cryptos)
-	aggregates.then(aggregates => data[2] = aggregates)
+	stock_function.then(stocks => {
+		data[0]= stocks[0]
+		stock_index += stocks[1]
+	})
 	await cryptos
-	await stocks
+	await stock_function
+	cryptos.then(cryptos => data[1] = cryptos)
+	aggregates.then(aggregates => {
+		data[2] = aggregates
+		data[2].push(['stock_index', stock_index])
+		data[2].push(['crypto_index', 0])
+
+	})
 	await aggregates
+	console.log(data)
 	return data
 
 }
