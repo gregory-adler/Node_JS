@@ -51,7 +51,6 @@ const getStocks= function (stocks, ticker){
 
 			}
 			stocks.sort()
-			// console.log(stock_index)
 			return [stocks, stock_index]
 		}
 		)
@@ -71,6 +70,7 @@ const getCryptos = function(cryptos){
   			} }).then(response =>{
   				// console.log(response.data.data)
   				const today = new Date()
+  				let crypto_index = 0
 
 				let time = today.toLocaleTimeString("en-us", options); 
 
@@ -85,6 +85,7 @@ const getCryptos = function(cryptos){
 					}
 					let rank = response.data.data[i]['cmc_rank']
 					let value = formatter.format(response.data.data[i]['quote']['USD']['price'])
+					crypto_index += Number(response.data.data[i]['quote']['USD']['price'])
 					let day = response.data.data[i]['quote']['USD']['percent_change_24h'].toFixed(2) + '%'
 					let week = response.data.data[i]['quote']['USD']['percent_change_7d'].toFixed(2) + '%'
 					let url = `/cryptocurrency-icons/svg/color/${symbol.toLowerCase()}.svg`
@@ -94,10 +95,12 @@ const getCryptos = function(cryptos){
 				}
 				if (cryptos.length == 0){
 					cryptos = loadCryptos()
-					return cryptos
+					return [cryptos, 0]
 				}
-				// console.log(cryptos)
-				return cryptos
+
+				crypto_index.toFixed(2)
+				return [cryptos, crypto_index]
+
 		}).catch(error =>{
 				console.log("crypto api error")
   				cryptos = loadCryptos()
@@ -118,12 +121,15 @@ const getAggregate = function(aggregates){
   				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
   			} }).then(response =>{
   				// console.log(response.data.data)
+  				let value
 
   				for (let property in response.data.data){
   					if (response.data.data.hasOwnProperty(property)){
   						// console.log (response.data.data[property])
   						if (property == 'eth_dominance' || property == 'btc_dominance'){
-  							aggregates.push([property, response.data.data[property]])
+  							value = response.data.data[property]
+  							value = value.toFixed(2) + '%'
+  							aggregates.push([property, value])
   						}
   					}
   				}
@@ -192,21 +198,26 @@ const functionCaller = async () =>{
 	let stocks = []
 	let data = [2]
 	stock_index = 0
-	cryptos = getCryptos(cryptos)
-	aggregates = getAggregate(aggregates)
+	crypto_function = getCryptos(cryptos)
 	stock_function= getStocks(stocks, ticker)
+	aggregates = getAggregate(aggregates)
 
 	stock_function.then(stocks => {
 		data[0]= stocks[0]
 		stock_index += stocks[1]
 	})
+
+	crypto_function.then(cryptos=> {
+		data[1]= cryptos[0]
+		crypto_index = cryptos[1]
+	})
+
 	await cryptos
 	await stock_function
-	cryptos.then(cryptos => data[1] = cryptos)
 	aggregates.then(aggregates => {
 		data[2] = aggregates
-		data[2].push(['stock_index', stock_index])
-		data[2].push(['crypto_index', 0])
+		data[2].push(['stock_index', '$' + stock_index.toFixed(2)])
+		data[2].push(['crypto_index', '$' + crypto_index.toFixed(2)])
 
 	})
 	await aggregates
