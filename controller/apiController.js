@@ -148,6 +148,7 @@ const getAggregate = function(aggregates){
 	return 
 }
 
+
 const saveCryptos = async(cryptos) =>{
 	await cryptos;
 	const jsonContent = JSON.stringify(cryptos);

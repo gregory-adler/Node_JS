@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <% include ../partials/header.ejs %>
-  <link href="/css/style.css" rel="stylesheet" type="text/css">
-</head>
 
-<body>
-	<p class = "aggregate"> 
-	<% aggregates.forEach((aggregate) => { %>
-	<b> <%= aggregate[0]%>: </b><%= aggregate[1]%> | <% }) 
-	%>
-	</p>
+	<head>
+		<% include ../partials/header.ejs %>
+		<link href="/css/style.css" rel="stylesheet" type="text/css">
+	</head>
 
-<div class = "data"> 
-<h1> Crypto </h1>
-	<% cryptos.forEach((crypto) => { %>
-	<p> <b> <img src = <%=crypto[3]%> svg width="27px" height="27px"> <%= crypto[1]%> : </b> &nbsp;<%= crypto[2]%> </p>
-	<% }) 
-	%>
-<br>
+	<body>
+		<p class = "aggregate"> 
+			<% aggregates.forEach((aggregate) => { %>
+			<b> <%= aggregate[0]%>: </b><%= aggregate[1]%> | <% }) 
+			%>
+		</p>
 
-<p class = "small"> <i>last update: <%= cryptos[0][6]%></i> </p>
+		<div class = "data"> 
+			<h1> Crypto </h1>
+			<% cryptos.forEach((crypto) => { %>
+			<p> <b> <img src = <%=crypto[3]%> svg width="27px" height="27px"> <%= crypto[1]%> : </b> &nbsp;<%= crypto[2]%> </p> <% 
+			})%>
 
-<h1> Stocks </h1>
+			<br>
 
-	<% stocks.forEach((stock) => { %>
-	<p> <b> <img src = <%=stock[3]%> svg width="27px" height="27px" > <%= stock[0]%>:&nbsp; </b><%= stock[1]%> <br> </p>
-	<% }) %>
+			<p class = "small"> <i>last update: <%= cryptos[0][6]%></i> </p>
 
-<br>
+			<h1> Stocks </h1>
+			<% stocks.forEach((stock) => { %>
+			<p> <b> <img src = <%=stock[3]%> svg width="27px" height="27px" > <%= stock[0]%>:&nbsp; </b><%= stock[1]%> <br> </p>
+			<% }) %>
 
-<p class = "small"> <i>last update: <%= stocks[0][2]%></i> </p>
+			<br>
 
-</div>
-</body>
+			<p class = "small"> <i>last update: <%= stocks[0][2]%></i> </p>
+		</div>
+
+	</body>
 </html>
