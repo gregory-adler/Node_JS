@@ -104,10 +104,12 @@ const getCryptos = function(cryptos){
 		}).catch(error =>{
 				console.log("crypto api error")
   				cryptos = loadCryptos()
-  				return cryptos
+  				console.log(cryptos)
+  				return [cryptos,0]
   			})
 
 	} catch(error){
+		return [1,1,1,1]
 		console.error(error)
 	}
 
@@ -138,11 +140,12 @@ const getAggregate = function(aggregates){
 
 	}).catch(error =>{
 				console.log("getAggregate api error")
-				return 1
+				return [1,1,1,1]
   			})
 
 	} catch(error){
 		console.error(error)
+		return [1,1,1,1]
 	}
 
 	return 
@@ -185,6 +188,7 @@ const loadStocks = async () => {
 
 const loadCryptos = async () => {
 	let cryptoData = fs.readFileSync('./cryptos.json');  
+	console.log(cryptoData)
 	let cryptos = JSON.parse(cryptoData);
 	console.log ("cryptos loaded")
 	// console.log(cryptos)
@@ -199,6 +203,7 @@ const functionCaller = async () =>{
 	let stocks = []
 	let data = [2]
 	stock_index = 0
+	crypto_index = 0
 	crypto_function = getCryptos(cryptos)
 	stock_function= getStocks(stocks, ticker)
 	aggregates = getAggregate(aggregates)
