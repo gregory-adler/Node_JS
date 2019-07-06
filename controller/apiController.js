@@ -3,16 +3,16 @@ const fs = require('fs');
 
 // styles currency
 const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2
+	style: 'currency',
+	currency: 'USD',
+	minimumFractionDigits: 2
 })
 
 
 // styles time
 let options = {  
 	hour: "2-digit", minute: "2-digit" , second: "2-digit", hour12: true
-};  
+};
 
 
 const getStocks= function (stocks, ticker){
@@ -66,11 +66,11 @@ const getCryptos = function(cryptos){
 	try {
 		return axios.get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=10&convert=USD`, 
 			{'headers': { 
-  				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
-  			} }).then(response =>{
-  				// console.log(response.data.data)
-  				const today = new Date()
-  				let crypto_index = 0
+				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
+			} }).then(response =>{
+				// console.log(response.data.data)
+				const today = new Date()
+				let crypto_index = 0
 
 				let time = today.toLocaleTimeString("en-us", options); 
 
@@ -103,10 +103,10 @@ const getCryptos = function(cryptos){
 
 		}).catch(error =>{
 				console.log("crypto api error")
-  				cryptos = loadCryptos()
-  				console.log(cryptos)
-  				return [cryptos,0]
-  			})
+				cryptos = loadCryptos()
+				console.log(cryptos)
+				return [cryptos,0]
+			})
 
 	} catch(error){
 		return [1,1,1,1]
@@ -120,28 +120,28 @@ const getAggregate = function(aggregates){
 	try{
 		return axios.get(`https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest`, 
 			{'headers': { 
-  				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
-  			} }).then(response =>{
-  				// console.log(response.data.data)
-  				let value
+				'X-CMC_PRO_API_KEY': 'b0417a80-7767-47ed-81f8-578f6345e7c8' 
+			} }).then(response =>{
+				// console.log(response.data.data)
+				let value
 
-  				for (let property in response.data.data){
-  					if (response.data.data.hasOwnProperty(property)){
-  						// console.log (response.data.data[property])
-  						if (property == 'eth_dominance' || property == 'btc_dominance'){
-  							value = response.data.data[property]
-  							value = value.toFixed(2) + '%'
-  							aggregates.push([property, value])
-  						}
-  					}
-  				}
+				for (let property in response.data.data){
+					if (response.data.data.hasOwnProperty(property)){
+						// console.log (response.data.data[property])
+						if (property == 'eth_dominance' || property == 'btc_dominance'){
+							value = response.data.data[property]
+							value = value.toFixed(2) + '%'
+							aggregates.push([property, value])
+						}
+					}
+				}
 
-  				return aggregates
+				return aggregates
 
 	}).catch(error =>{
 				console.log("getAggregate api error")
 				return [1,1,1,1]
-  			})
+			})
 
 	} catch(error){
 		console.error(error)
@@ -161,7 +161,7 @@ const saveCryptos = async(cryptos) =>{
 			return console.log(err);
 		}
 
-    	console.log("The file was saved!");
+	console.log("The file was saved!");
 	}); 
 }
 
@@ -174,7 +174,7 @@ const saveStocks = async(stocks) =>{
 			return console.log(err);
 		}
 
-    	console.log("The file was saved!");
+	console.log("The file was saved!");
 	}); 
 }
 

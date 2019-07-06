@@ -18,9 +18,8 @@ describe('Test1', function() {
 describe('Test2', function() {
 	describe('#loadstocks()', function() {
 		it('should return an array of saved stock values', function() {
-			let stockData = fs.readFileSync('./stocks.json');  
+			let stockData = fs.readFileSync('./stocks.json');
 			let stocks = JSON.parse(stockData);
-			console.log(stocks);
 			assert.equal((typeof stocks !== 'undefined' && stocks.length > 0), true)
 		});
 
@@ -34,7 +33,6 @@ describe('Test3', function() {
 		it('should return an array of saved crypto values', function() {
 		let cryptoData = fs.readFileSync('./cryptos.json');  
 		let cryptos = JSON.parse(cryptoData);
-		console.log (cryptos)
 		assert.equal((typeof cryptos !== 'undefined' && cryptos.length > 0), true)
 		});
 
