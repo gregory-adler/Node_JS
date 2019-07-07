@@ -4,14 +4,34 @@
 	<head>
 		<% include ../partials/header.ejs %>
 		<link href="/css/style.css" rel="stylesheet" type="text/css">
+		</script>
 	</head>
 
 	<body>
+		<div id = "everything">
 		<p class = "aggregate"> 
 			<% aggregates.forEach((aggregate) => { %>
 			<b> <%= aggregate[0]%>: </b><%= aggregate[1]%> | <% }) 
 			%>
+			<button id ="button" onclick="myFunction()">nightmode</button>
+
 		</p>
+			<script>
+				function myFunction() {
+					const element = document.getElementById("everything");
+					if (element.classList.contains('nightMode')){
+						element.classList.remove("nightMode");
+						element.classList.add("lightMode");
+						document.getElementById("button").classList.remove('nightbutton')
+
+					}
+					else {
+						element.classList.remove("lightMode");
+						element.classList.add("nightMode");
+						document.getElementById("button").classList.add('nightbutton')
+					}
+				}
+			</script>
 
 		<div class = "data"> 
 			<h1> Crypto </h1>
@@ -32,6 +52,8 @@
 
 			<p class = "small"> <i>last update: <%= stocks[0][2]%></i> </p>
 		</div>
-
+	</div>
 	</body>
 </html>
+
+
