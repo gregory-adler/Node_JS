@@ -1,6 +1,7 @@
-body {
-}
 
+.everything {
+	height: 100%;
+}
 .nightMode{
 	background-color: black;
 	color: white;
@@ -27,6 +28,11 @@ h1 {
 p {
 }
 
+body{
+	height: 100%;
+	background-color: white;
+}
+
 .small {
 	margin-left: 1em;
 	margin-top: -1em;
@@ -35,7 +41,7 @@ p {
 }
 .aggregate {
 
-	margin-top: .5em;
+	padding-top: .5em;
 	margin-left: 25%;
 	margin-right: 25%;
 	margin-bottom: 2em;
