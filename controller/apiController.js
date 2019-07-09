@@ -211,19 +211,21 @@ const functionCaller = async () =>{
 	stock_function.then(stocks => {
 		data[0]= stocks[0]
 		stock_index += stocks[1]
+		stock_index = formatter.format(stock_index)
 	})
 
 	crypto_function.then(cryptos=> {
 		data[1]= cryptos[0]
 		crypto_index = cryptos[1]
+		crypto_index = formatter.format(crypto_index)
 	})
 
 	await cryptos
 	await stock_function
 	aggregates.then(aggregates => {
 		data[2] = aggregates
-		data[2].push(['stock_index', '$' + stock_index.toFixed(2)])
-		data[2].push(['crypto_index', '$' + crypto_index.toFixed(2)])
+		data[2].push(['stock_index', stock_index])
+		data[2].push(['crypto_index', crypto_index])
 
 	})
 	await aggregates
